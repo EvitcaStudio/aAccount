@@ -127,6 +127,7 @@ Interface
 				onHide(pClient)
 					if (this.name === 'confirmlabel') // we use this type elsewhere
 						this.text = '<div class="info-text center"></div>'
+						pClient.deletingCharacter = null
 
 			ConfirmBackground
 				atlasName = ''
@@ -163,9 +164,11 @@ Interface
 					if (pButton === 1)
 						if (this.isMousedDown())
 							if (pClient.deletingCharacter)
+								for (var i = 1; i <= aAccount.maxCharacterSlots; i++)
+									pClient.getInterfaceElement('load_interface', 'slot' + i).charName = null
 								pClient.sendPacket(aNetwork.S_DELETE_SLOT_PACKET, [pClient.deletingCharacter])
 								pClient.hideInterface('load_confirm_interface')
-								pClient.deletingCharacter = ''
+								pClient.deletingCharacter = null
 
 			ConfirmNoButton
 				width = 75
@@ -191,6 +194,6 @@ Interface
 					if (pButton === 1)
 						if (this.isMousedDown())
 							pClient.hideInterface('load_confirm_interface')
-							pClient.deletingCharacter = ''
+							pClient.deletingCharacter = null
 
 #END CLIENTCODE
