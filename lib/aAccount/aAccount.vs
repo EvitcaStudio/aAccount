@@ -284,13 +284,9 @@ const saltRounds = 10;
 						// force the character to leave and save the account data
 						aAccount.onCharacterLeave(otherClient);
 						// take the account data of this other account since its more recent
-						console.log(this.accountData, 'this.accountData before')
-						console.log(otherClient.accountData, 'otherClient.accountData before')
 						VS.Util.copyObject(this.accountData, otherClient.accountData);
 						// reload slots with this data for the client joining
 						VS.World.global.aNetwork.s_loadSlots(this);
-						console.log(this.accountData, 'this.accountData after')
-						console.log(otherClient.accountData, 'otherClient.accountData after')
 					}
 					// Forecfully logout the other account, but do not call for the mob to be logged out
 					aAccount.logout(otherClient, true);
@@ -498,7 +494,6 @@ const saltRounds = 10;
 				savedData.oldx = Math.round(pClient.mob.xPos);
 				savedData.oldy = Math.round(pClient.mob.yPos);
 				savedData.mapName = pClient.mob.mapName;
-				console.log(savedData, 'savedData')
 				pClient.accountData[pClient.accountName][pClient.mob.info.pName] = savedData;
 				
 				if (this.debugging) {
@@ -544,7 +539,6 @@ const saltRounds = 10;
 					// if you looped through the amount of characters, and the loop matches the slot u clicked, this must be the correct character
 					if (count === pSlot) {
 						for (var variable in pData[pAccountName][character]) {
-							console.log('variable: ' + variable, pData[pAccountName][character][variable])
 							if (saveableInfo.includes(variable)) {
 								this.mob.info[variable] = pData[pAccountName][character][variable];
 							}
@@ -558,7 +552,6 @@ const saltRounds = 10;
 							}
 						}
 
-						console.log(this.mob.info, 'mob info')
 						aAccount.initializeLoadedCharacter(this);
 						if (aAccount.debugging) {
 							console.log('--' + this.accountName + '\'s [Character]: ' + this.mob.info.pName + ' has been loaded');
