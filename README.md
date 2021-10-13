@@ -1,4 +1,4 @@
 # aAccount
-A useful library to handle sending packets to and from the server. Works with a variety of other `aLibraries`
+A useful library that creates and manages an account system for you. Passwords are hashed and salted and never stored as plaintext. A proper doc is in the works.
 
 **🚧🚧 Docs coming soon 🚧🚧**
