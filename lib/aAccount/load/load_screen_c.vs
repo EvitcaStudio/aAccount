@@ -111,6 +111,8 @@ Interface
 
 		LoadDeleteConfirm
 			atlasName = ''
+			plane = 999999
+			layer = HUD_LAYER + 10
 			
 			onShow(pClient)
 				this.setPos(this.defaultPos.x, this.defaultPos.y)
@@ -130,8 +132,8 @@ Interface
 				atlasName = ''
 				width = 225
 				height = 100
-				color = '#212121'
-				layer = 3
+				color = { 'tint': 0x212121 }
+				layer = HUD_LAYER + 10
 				interfaceType = 'WebBox'
 				mouseOpacity = 2
 				touchOpacity = 1
@@ -143,17 +145,18 @@ Interface
 				mouseOpacity = 2
 				touchOpacity = 1
 				interfaceType = 'WebBox'
-				color = '#303030'
+				layer = HUD_LAYER + 20
+				color = { 'tint': 0x303030 }
 				text = '<div class="info-text center button-padding-top">Yes</div>'
 				parentElement = 'confirmbackground'
 
 				onMouseEnter(pClient, pX, pY)
 					if (!pClient._dragging.element)
-						this.color = '#5c5c5c'
+						this.color = { 'tint': 0x5c5c5c }
 						pClient.setMouseCursor('pointer')
 
 				onMouseExit(pClient, pX, pY)
-					this.color = '#303030'
+					this.color = { 'tint': 0x303030 }
 					pClient.setMouseCursor('')
 
 				onMouseClick(pClient, pX, pY, pButton)
@@ -170,17 +173,18 @@ Interface
 				mouseOpacity = 2
 				touchOpacity = 1
 				interfaceType = 'WebBox'
-				color = '#303030'
+				color = { 'tint': 0x303030 }
+				layer = HUD_LAYER + 20
 				text = '<div class="info-text center button-padding-top">No</div>'
 				parentElement = 'confirmbackground'
 
 				onMouseEnter(pClient, pX, pY)
 					if (!pClient._dragging.element)
-						this.color = '#5c5c5c'
+						this.color = { 'tint': 0x5c5c5c }
 						pClient.setMouseCursor('pointer')
 
 				onMouseExit(pClient, pX, pY)
-					this.color = '#303030'
+					this.color = { 'tint': 0x303030 }
 					pClient.setMouseCursor('')
 
 				onMouseClick(pClient, pX, pY, pButton)
