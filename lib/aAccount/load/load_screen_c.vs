@@ -44,7 +44,6 @@ Client
 						if (slot > aAccount.maxCharacterSlots - 1)
 							break
 
-
 Interface
 	Load_Interface
 		atlasName = 'load_atlas'
@@ -56,18 +55,25 @@ Interface
 			iconName = 'slots_background'
 
 		Character_Creation_Label
-			width = 266
-			height = 20
+			width = 267
+			height = 40
 			interfaceType = 'WebBox'
-			text = '<div class="info-text center" style="pointer-events: none;">Character Creation</div>'
+			text = '<div class="info-text big center" style="pointer-events: none;">Load Character</div>'
 
 		Slot
 			interfaceType = 'WebBox'
 			textStyle = { 'fill': '#fff' }
-			width = 266
-			height = 100
+			width = 267
+			height = 79
+			iconName = 'slot'
 			mouseOpacity = 2
 			touchOpacity = 1
+
+			onMouseEnter(pClient, pX, pY)
+				this.iconState = 'slot_highlighted'
+
+			onMouseExit(pClient, pX, pY)
+				this.iconState = ''
 			
 			onMouseClick(pClient, pX, pY, pButton)
 				if (pButton === 1)
@@ -77,8 +83,8 @@ Interface
 
 		Delete
 			iconName = 'trash'
-			width = 32
-			height = 32
+			width = 16
+			height = 16
 			mouseOpacity = 2
 			touchOpacity = 1
 
@@ -104,10 +110,10 @@ Interface
 										pClient.deletingCharacter = Util.toNumber(slotNumber)
 
 			onMouseEnter(pClient, pX, pY)
-				this.iconName = 'trash_highlighted'
+				this.iconState = 'trash_highlighted'
 
 			onMouseExit(pClient, pX, pY)
-				this.iconName = 'trash'
+				this.iconState = ''
 
 		LoadDeleteConfirm
 			atlasName = ''
