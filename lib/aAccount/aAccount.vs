@@ -9,7 +9,7 @@
 				let aAccount = {};
 				VS.World.global.aAccount = aAccount;
 				// the max amount of slots this account can have
-				aAccount.maxCharacterSlots = 3;
+				aAccount.maxCharacterSlots = 4;
 			}
 			VS.Client.___EVITCA_aAccount = true;
 		}
@@ -58,9 +58,9 @@ const saltRounds = 10;
 		// a variable that is a boolean for if the library is in debug mode or not
 		aAccount.debugging = false;
 		// the max amount of slots this account can have
-		aAccount.maxCharacterSlots = 3;
+		aAccount.maxCharacterSlots = 4;
 		// an array that includes the slot number of every available choice. If a slot with a number that is not in this array is clicked, then no load happens.
-		aAccount.acceptedSlots = [1, 2, 3];
+		aAccount.acceptedSlots = [1, 2, 3, 4];
 		// the interval at which the game saves crutial data.
 		aAccount.saveDelay = Date.now() + PERIODIC_SAVE_INTERVAL;
 		// the amount of confirmation checks the server has recieved from save functions that have completed.
