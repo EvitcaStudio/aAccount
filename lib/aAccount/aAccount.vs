@@ -6,7 +6,7 @@
 		if (VS.Client && VS.World.global && VS.World.global.aNetwork) {
 			clearInterval(engineWaitId);
 			if (VS.World.getCodeType() !== 'local') {
-				let aAccount = {};
+				var aAccount = {};
 				VS.World.global.aAccount = aAccount;
 				// the max amount of slots this account can have
 				aAccount.maxCharacterSlots = 4;
@@ -303,9 +303,12 @@ const saltRounds = 10;
 		// loads a vylocity account instead of a custom account
 		aAccount.loadVyloAccount = function(pClient) {
 			let username = pClient.getAccountName();
+			console.log('username is : ', username)
 			if (username === 'Guest' || username.match(VS.Util.regExp('^Guest\-(.*)$')) || username.match(VS.Util.regExp('^Guest[0-9]+$')) && !username.includes('@') || VS.World.getCodeType() === 'local') {
+				console.log('you are a guest or you are playing locally!')
 				// You are a guest according to vylo so you have to login in via a custom account system or you have no access to vylocity API so you have to register with the custom account system.
-				pClient.sendPacket(VS.World.global.aNetwork.C_SHOW_INTERFACE_PACKET, [VS.World.global.aNetwork.LOGIN_INTERFACE_CODE]);
+				console.log('show interface packet login SENT')
+				pClient.sendPacket(VS.World.global.aNetwork.C_SHOW_INTERFACE_PACKET, [VS.World.global.aNetwork.INTERFACE_CODES.LOGIN_INTERFACE_CODE]);
 				return;
 			}
 
@@ -379,8 +382,8 @@ const saltRounds = 10;
 				}
 			}
 
-			pClient.sendPacket(VS.World.global.aNetwork.C_HIDE_INTERFACE_PACKET, [VS.World.global.aNetwork.ALL_INTERFACES_CODE]);
-			pClient.sendPacket(VS.World.global.aNetwork.C_SHOW_INTERFACE_PACKET, [VS.World.global.aNetwork.LOGIN_INTERFACE_CODE]);
+			pClient.sendPacket(VS.World.global.aNetwork.C_HIDE_INTERFACE_PACKET, [VS.World.global.aNetwork.INTERFACE_CODES.ALL_INTERFACES_CODE]);
+			pClient.sendPacket(VS.World.global.aNetwork.C_SHOW_INTERFACE_PACKET, [VS.World.global.aNetwork.INTERFACE_CODES.LOGIN_INTERFACE_CODE]);
 			pClient.setMacroAtlas('login_macro');
 
 			if (pClient.loggedIn) {
@@ -690,7 +693,7 @@ const saltRounds = 10;
 					aAccount.saveUserDatabase();
 					// save accounts database since its updated here
 					aAccount.saveAccountsDatabase();
-					pClient.sendPacket(VS.World.global.aNetwork.C_HIDE_INTERFACE_PACKET, [VS.World.global.aNetwork.REGISTER_INTERFACE_CODE]);
+					pClient.sendPacket(VS.World.global.aNetwork.C_HIDE_INTERFACE_PACKET, [VS.World.global.aNetwork.INTERFACE_CODES.REGISTER_INTERFACE_CODE]);
 				});
 			}
 		}
@@ -708,7 +711,7 @@ const saltRounds = 10;
 						aAccount.setDisconnectEvent(pClient);
 						pClient.accountName = pUsername;
 						aAccount.login(pClient);
-						pClient.sendPacket(VS.World.global.aNetwork.C_HIDE_INTERFACE_PACKET, [VS.World.global.aNetwork.LOGIN_INTERFACE_CODE]);
+						pClient.sendPacket(VS.World.global.aNetwork.C_HIDE_INTERFACE_PACKET, [VS.World.global.aNetwork.INTERFACE_CODES.LOGIN_INTERFACE_CODE]);
 						return;
 
 					} else {
