@@ -18,7 +18,7 @@ Client
 			this.validateInputs(PASSWORD_SHOW, 'Required')
 		
 		if (usernameInput.text && passwordInput.text)
-			this.sendPacket(aNetwork.S_VALIDATE_LOGIN_PACKET, [usernameInput.text, passwordInput.text])
+			this.sendPacket(aNetwork.S_AACCOUNT_PACKETS.S_VALIDATE_LOGIN_PACKET, [usernameInput.text, passwordInput.text])
 
 	command cycleLoginInputs()
 		var userInput = this.getInterfaceElement('login_interface', 'usernameinput')
@@ -127,7 +127,7 @@ Interface
 			touchOpacity = 0
 			layer = HUD_LAYER + 2
 			warningLabel = true
-			text = '<span style="pointer-events: none; color: #ffffff; font-size: 12px; font-family: Sylfaen;" class="center">Invalid</span>'
+			text = '<span style="pointer-events: none; color: #ffffff; font-size: 12px; font-family: Arial;" class="center">Invalid</span>'
 
 		PasswordWarningLabel
 			iconName = 'warning_message_background'
@@ -138,7 +138,7 @@ Interface
 			touchOpacity = 0
 			layer = HUD_LAYER + 2
 			warningLabel = true
-			text = '<span style="pointer-events: none; color: #ffffff; font-size: 12px; font-family: Sylfaen;" class="center">Invalid</span>'
+			text = '<span style="pointer-events: none; color: #ffffff; font-size: 12px; font-family: Arial;" class="center">Invalid</span>'
 				
 		LoginButton
 			interfaceType = 'WebBox'
@@ -181,7 +181,7 @@ Interface
 			touchOpacity = 0
 
 			onShow()
-				this.text = '<div style="color: #ffffff; font-size: 18px; font-family: Sylfaen;" class="center">' + GAME_NAME + '</div>'
+				this.text = '<div style="color: #ffffff; font-size: 18px; font-family: Arial;" class="center">' + GAME_NAME + '</div>'
 
 		ViewPasswordButton
 			iconName = 'view_password'
@@ -227,7 +227,7 @@ Interface
 			mouseOpacity = 0
 			touchOpacity = 0
 			layer = HUD_LAYER + 1
-			text = '<div style="color: #ffffff; font-size: 12px; font-family: Sylfaen;" class="center">Don\'t have an account? Register now!</div>'
+			text = '<div style="color: #ffffff; font-size: 12px; font-family: Arial;" class="center">Don\'t have an account? Register now!</div>'
 
 		CapsIndicator
 			width = 150

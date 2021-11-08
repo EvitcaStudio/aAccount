@@ -64,21 +64,21 @@ Interface
 			RecoverLabel
 				width = 150
 				height = 30
-				text = '<span style="pointer-events: none; color: #ffffff; font-size: 15px; font-family: Sylfaen;" class="center">Recover Account</span>'
+				text = '<span style="pointer-events: none; color: #ffffff; font-size: 15px; font-family: Arial;" class="center">Recover Account</span>'
 
 			UsernameWarningLabel
 				iconName = 'warning_message_background'
 				plane = 2
 				layer = HUD_LAYER + 7
 				warningLabel = true
-				text = '<span style="pointer-events: none; color: #ffffff; font-size: 12px; font-family: Sylfaen;" class="center"></span>'
+				text = '<span style="pointer-events: none; color: #ffffff; font-size: 12px; font-family: Arial;" class="center"></span>'
 
 			BackupInputWarningLabel
 				iconName = 'warning_message_background'
 				plane = 2
 				layer = HUD_LAYER + 7
 				warningLabel = true
-				text = '<span style="pointer-events: none; color: #ffffff; font-size: 12px; font-family: Sylfaen;" class="center"></span>'
+				text = '<span style="pointer-events: none; color: #ffffff; font-size: 12px; font-family: Arial;" class="center"></span>'
 
 		Bars
 			iconName = 'recover_input'

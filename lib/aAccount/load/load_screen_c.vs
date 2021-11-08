@@ -79,7 +79,7 @@ Interface
 				if (pButton === 1)
 					if (this.isMousedDown())
 						if (!pClient.deletingCharacter)
-							pClient.sendPacket(aNetwork.S_LOAD_PLAYER_PACKET, [extractNumberOutOfString(this.name)])
+							pClient.sendPacket(aNetwork.S_AACCOUNT_PACKETS.S_LOAD_PLAYER_PACKET, [extractNumberOutOfString(this.name)])
 
 		Delete
 			iconName = 'trash'
@@ -172,7 +172,7 @@ Interface
 							if (pClient.deletingCharacter)
 								for (var i = 1; i <= aAccount.maxCharacterSlots; i++)
 									pClient.getInterfaceElement('load_interface', 'slot' + i).charName = null
-								pClient.sendPacket(aNetwork.S_DELETE_SLOT_PACKET, [pClient.deletingCharacter])
+								pClient.sendPacket(aNetwork.S_AACCOUNT_PACKETS.S_DELETE_SLOT_PACKET, [pClient.deletingCharacter])
 								pClient.hideInterface('load_confirm_interface')
 								pClient.deletingCharacter = null
 

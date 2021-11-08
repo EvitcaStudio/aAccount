@@ -5,13 +5,14 @@
 	let engineWaitId = setInterval(function() {
 		if (VS.Client && VS.World.global && VS.World.global.aNetwork) {
 			clearInterval(engineWaitId);
-			if (VS.World.getCodeType() !== 'local') {
-				var aAccount = {};
-				VS.World.global.aAccount = aAccount;
-				// the max amount of slots this account can have
-				aAccount.maxCharacterSlots = 4;
+			let aAccount = {};
+			if (VS.World.getCodeType() === 'local') {
+				aAccount = VS.World.global.aAccount;
 			}
+			VS.World.global.aAccount = aAccount;
 			VS.Client.___EVITCA_aAccount = true;
+			// the max amount of slots this account can have
+			aAccount.maxCharacterSlots = 4;
 		}
 	});
 })();
@@ -93,7 +94,7 @@ const saltRounds = 10;
 				pClient.onDisconnect = function() {
 					if (this.accountName) {
 						if (this.loggedIn) {
-							aAccount.logout(this);
+							VS.World.global.aAccount.logout(this);
 						}
 					}
 					if (this._onDisconnect) {
@@ -303,12 +304,9 @@ const saltRounds = 10;
 		// loads a vylocity account instead of a custom account
 		aAccount.loadVyloAccount = function(pClient) {
 			let username = pClient.getAccountName();
-			console.log('username is : ', username)
 			if (username === 'Guest' || username.match(VS.Util.regExp('^Guest\-(.*)$')) || username.match(VS.Util.regExp('^Guest[0-9]+$')) && !username.includes('@') || VS.World.getCodeType() === 'local') {
-				console.log('you are a guest or you are playing locally!')
 				// You are a guest according to vylo so you have to login in via a custom account system or you have no access to vylocity API so you have to register with the custom account system.
-				console.log('show interface packet login SENT')
-				pClient.sendPacket(VS.World.global.aNetwork.C_SHOW_INTERFACE_PACKET, [VS.World.global.aNetwork.INTERFACE_CODES.LOGIN_INTERFACE_CODE]);
+				pClient.sendPacket(VS.World.global.aNetwork.INTERFACE_PACKETS.C_SHOW_INTERFACE_PACKET, [VS.World.global.aNetwork.INTERFACE_CODES.LOGIN_INTERFACE_CODE]);
 				return;
 			}
 
@@ -349,6 +347,14 @@ const saltRounds = 10;
 			// Show slots interface with loaded characters
 		}
 
+		aAccount.getAccountName = function(pClient) {
+			return pClient.accountName;
+		}
+
+		aAccount.isVyloAccount = function(pClient) {
+			return pClient.accountData[pClient.accountName].vylo;
+		}
+
 		// strip the account of its data
 		aAccount.stripAccountData = function(pClient) {
 			pClient.accountData = null;
@@ -382,8 +388,8 @@ const saltRounds = 10;
 				}
 			}
 
-			pClient.sendPacket(VS.World.global.aNetwork.C_HIDE_INTERFACE_PACKET, [VS.World.global.aNetwork.INTERFACE_CODES.ALL_INTERFACES_CODE]);
-			pClient.sendPacket(VS.World.global.aNetwork.C_SHOW_INTERFACE_PACKET, [VS.World.global.aNetwork.INTERFACE_CODES.LOGIN_INTERFACE_CODE]);
+			pClient.sendPacket(VS.World.global.aNetwork.INTERFACE_PACKETS.C_HIDE_INTERFACE_PACKET, [VS.World.global.aNetwork.INTERFACE_CODES.ALL_INTERFACES_CODE]);
+			pClient.sendPacket(VS.World.global.aNetwork.INTERFACE_PACKETS.C_SHOW_INTERFACE_PACKET, [VS.World.global.aNetwork.INTERFACE_CODES.LOGIN_INTERFACE_CODE]);
 			pClient.setMacroAtlas('login_macro');
 
 			if (pClient.loggedIn) {
@@ -431,9 +437,11 @@ const saltRounds = 10;
 		// when the character joins the game, not the client
 		aAccount.onCharacterJoin = function(pClient, pNew=false) {
 			let JOIN = 0;
+			let NEW = 1;
+			let OLD = 0;
 			if (pClient.mob.onJoin && typeof(pClient.mob.onJoin) === 'function') {
 				pClient.mob.onJoin(pNew);
-				pClient.sendPacket(VS.World.global.aNetwork.C_CHARACTER_HANDLE_CONNECTION_PACKET, [JOIN]);
+				pClient.sendPacket(VS.World.global.aNetwork.C_AACCOUNT_PACKETS.C_CHARACTER_HANDLE_CONNECTION_PACKET, [JOIN, (pNew ? NEW : OLD)]);
 			}
 			pClient.mob.inGame = true;
 			// pClient.setMacroAtlas('default_macro'); /* removed because there is no way to reasonably allow the correct macro to be set */
@@ -446,7 +454,7 @@ const saltRounds = 10;
 			this.saveClientCharacter(pClient);
 			if (pClient.mob.onLeave && typeof(pClient.mob.onLeave) === 'function') {
 				pClient.mob.onLeave();
-				pClient.sendPacket(VS.World.global.aNetwork.C_CHARACTER_HANDLE_CONNECTION_PACKET, [LEAVE]);
+				pClient.sendPacket(VS.World.global.aNetwork.C_AACCOUNT_PACKETS.C_CHARACTER_HANDLE_CONNECTION_PACKET, [LEAVE]);
 			}
 			pClient.mob.inGame = false;
 			VS.delDiob(pClient.mob);
@@ -611,7 +619,7 @@ const saltRounds = 10;
 					if (pInternal) {
 						return false;
 					}
-					pClient.sendPacket(VS.World.global.aNetwork.C_VERIFICATION_WARNING_PACKET, [3]);
+					pClient.sendPacket(VS.World.global.aNetwork.C_AACCOUNT_PACKETS.C_VERIFICATION_WARNING_PACKET, [3]);
 					return false;
 				}
 			}
@@ -620,7 +628,7 @@ const saltRounds = 10;
 				if (pInternal) {
 					return false;
 				}
-				pClient.sendPacket(VS.World.global.aNetwork.C_VERIFICATION_WARNING_PACKET, [2]);
+				pClient.sendPacket(VS.World.global.aNetwork.C_AACCOUNT_PACKETS.C_VERIFICATION_WARNING_PACKET, [2]);
 				return false;
 			}
 				
@@ -634,7 +642,7 @@ const saltRounds = 10;
 			if (pInternal) {
 				return false;
 			}
-			pClient.sendPacket(VS.World.global.aNetwork.C_VERIFICATION_WARNING_PACKET, [2]);
+			pClient.sendPacket(VS.World.global.aNetwork.C_AACCOUNT_PACKETS.C_VERIFICATION_WARNING_PACKET, [2]);
 			return false;
 		}
 
@@ -693,7 +701,7 @@ const saltRounds = 10;
 					aAccount.saveUserDatabase();
 					// save accounts database since its updated here
 					aAccount.saveAccountsDatabase();
-					pClient.sendPacket(VS.World.global.aNetwork.C_HIDE_INTERFACE_PACKET, [VS.World.global.aNetwork.INTERFACE_CODES.REGISTER_INTERFACE_CODE]);
+					pClient.sendPacket(VS.World.global.aNetwork.INTERFACE_PACKETS.C_HIDE_INTERFACE_PACKET, [VS.World.global.aNetwork.INTERFACE_CODES.REGISTER_INTERFACE_CODE]);
 				});
 			}
 		}
@@ -711,11 +719,11 @@ const saltRounds = 10;
 						aAccount.setDisconnectEvent(pClient);
 						pClient.accountName = pUsername;
 						aAccount.login(pClient);
-						pClient.sendPacket(VS.World.global.aNetwork.C_HIDE_INTERFACE_PACKET, [VS.World.global.aNetwork.INTERFACE_CODES.LOGIN_INTERFACE_CODE]);
+						pClient.sendPacket(VS.World.global.aNetwork.INTERFACE_PACKETS.C_HIDE_INTERFACE_PACKET, [VS.World.global.aNetwork.INTERFACE_CODES.LOGIN_INTERFACE_CODE]);
 						return;
 
 					} else {
-						pClient.sendPacket(VS.World.global.aNetwork.C_VERIFICATION_WARNING_PACKET, [0]);
+						pClient.sendPacket(VS.World.global.aNetwork.C_AACCOUNT_PACKETS.C_VERIFICATION_WARNING_PACKET, [0]);
 					}
 				});
 			}
@@ -793,7 +801,7 @@ const saltRounds = 10;
 		aAccount.toggleDebug();
 
 		if (aAccount.debugging) {
-			console.log('Automatic save system has started')
+			console.log('Automatic save system has started');
 		}
 	}
 })();
