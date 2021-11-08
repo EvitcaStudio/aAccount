@@ -1,0 +1,1 @@
+{"macros":[{"name":"registerCommand()","key":"Enter","keyDown":"registerCommand()","keyUp":""},{"name":"cycleRegisterInputs()","key":"Tab","keyDown":"cycleRegisterInputs()","keyUp":""}]}
