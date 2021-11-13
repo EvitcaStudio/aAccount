@@ -60,8 +60,6 @@ const saltRounds = 10;
 		aAccount.debugging = false;
 		// the max amount of slots this account can have
 		aAccount.maxCharacterSlots = 4;
-		// an array that includes the slot number of every available choice. If a slot with a number that is not in this array is clicked, then no load happens.
-		aAccount.acceptedSlots = [1, 2, 3, 4];
 		// the interval at which the game saves crutial data.
 		aAccount.saveDelay = Date.now() + PERIODIC_SAVE_INTERVAL;
 		// the amount of confirmation checks the server has recieved from save functions that have completed.
@@ -78,6 +76,15 @@ const saltRounds = 10;
 		aAccount.automaticSaving = false;
 		// a var determining if the accoutn system is allowing new logins, if it is not then no account can login
 		aAccount.LOCKED = false;
+
+		// an array that includes the slot number of every available choice. If a slot with a number that is not in this array is clicked, then no load happens.
+		aAccount.acceptedSlots = (function() {
+			let slots = [];
+			for (let i = 1; i <= aAccount.maxCharacterSlots; i++) {
+				slots.push(i);
+			}
+			return slots;
+		})();
 
 		// toggle the debug mode, which allows descriptive text to be shown when things of notice happen
 		aAccount.toggleDebug = function() {
@@ -798,7 +805,6 @@ const saltRounds = 10;
 		}, PERIODIC_SAVE_INTERVAL);
 
 		aAccount.loadDatabases();
-		aAccount.toggleDebug();
 
 		if (aAccount.debugging) {
 			console.log('Automatic save system has started');
