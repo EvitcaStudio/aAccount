@@ -1,13 +1,13 @@
 #ENABLE LOCALCLIENTCODE
 #BEGIN CLIENTCODE
 #BEGIN JAVASCRIPT
-(function() {
-	let engineWaitId = setInterval(function() {
-		if (VS.Client && VS.World.global && VS.World.global.aNetwork) {
+(() => {
+	const engineWaitId = setInterval(() => {
+		if (VS?.Client && VS?.World?.global && VS?.World?.global?.aNetwork) {
 			clearInterval(engineWaitId);
 			let aAccount = {};
 			if (VS.World.getCodeType() === 'local') {
-				aAccount = VS.World.global.aAccount;
+				aAccount = VS.World.global.aAccount ? VS.World.global.aAccount : aAccount;
 			}
 			VS.World.global.aAccount = aAccount;
 			VS.Client.___EVITCA_aAccount = true;
@@ -29,22 +29,22 @@ const saltRounds = 10;
 
 #BEGIN JAVASCRIPT
 
-(function() {
+(() => {
 	const PERIODIC_SAVE_INTERVAL = 1800000; // 30 Minutes
 
-	let saveableStats = [];
-	let saveableStyles = [];
-	let saveableInfo = ['pName', 'oldx', 'oldy', 'mapName'];
+	const saveableStats = [];
+	const saveableStyles = [];
+	const saveableInfo = ['pName', 'oldx', 'oldy', 'mapName'];
 
-	let engineWaitId = setInterval(function() {
+	const engineWaitId = setInterval(function() {
 		if (VS.World.global && VS.World.global.aNetwork) {
 			clearInterval(engineWaitId);
 			buildAccount();
 		}
 	});
 
-	let buildAccount = function() {
-		let aAccount = {};
+	const buildAccount = () => {
+		const aAccount = {};
 		VS.World.global.aAccount = aAccount;
 		// array that will store all taken usernames
 		aAccount.usernameDatabase = [];
@@ -79,7 +79,7 @@ const saltRounds = 10;
 
 		// an array that includes the slot number of every available choice. If a slot with a number that is not in this array is clicked, then no load happens.
 		aAccount.acceptedSlots = (function() {
-			let slots = [];
+			const slots = [];
 			for (let i = 1; i <= aAccount.maxCharacterSlots; i++) {
 				slots.push(i);
 			}
@@ -113,8 +113,8 @@ const saltRounds = 10;
 
 		// refresh the connected clients
 		aAccount.refreshClients = function() {
-			var ob = {};
-			for (var client of VS.World.getClients()) {
+			const ob = {};
+			for (const client of VS.World.getClients()) {
 				if (client.accountName && client.loggedIn) {
 					ob[client.accountName] = client;
 				}
@@ -247,7 +247,7 @@ const saltRounds = 10;
 					aAccount.clientsToBeSavedConfirmations = 0;
 					aAccount.clientsToBeSaved = 0;
 					aAccount.automaticSaving = false;
-					for (var c of aAccount.clientsToBeSavedAutomatically) {
+					for (const c of aAccount.clientsToBeSavedAutomatically) {
 						// reset the temporary save indicator on the client
 						c._automaticallySaved = false;
 					}
@@ -282,7 +282,7 @@ const saltRounds = 10;
 				console.log('--' + this.accountName + '\'s account loaded--');
 			}
 
-			let otherClient = aAccount.clients[this.accountName];
+			const otherClient = aAccount.clients[this.accountName];
 			// if this account is already connected to the game
 			if (otherClient && !pVylo) {
 				// check if this client is actually signed in
@@ -310,7 +310,7 @@ const saltRounds = 10;
 
 		// loads a vylocity account instead of a custom account
 		aAccount.loadVyloAccount = function(pClient) {
-			let username = pClient.getAccountName();
+			const username = pClient.getAccountName();
 			if (username === 'Guest' || username.match(VS.Util.regExp('^Guest\-(.*)$')) || username.match(VS.Util.regExp('^Guest[0-9]+$')) && !username.includes('@') || VS.World.getCodeType() === 'local') {
 				// You are a guest according to vylo so you have to login in via a custom account system or you have no access to vylocity API so you have to register with the custom account system.
 				pClient.sendPacket(VS.World.global.aNetwork.INTERFACE_PACKETS.C_SHOW_INTERFACE_PACKET, [VS.World.global.aNetwork.INTERFACE_CODES.LOGIN_INTERFACE_CODE]);
@@ -320,10 +320,10 @@ const saltRounds = 10;
 			// if this account name isn't found in the database then you must be new
 			if (!this.usernameDatabase.includes(username) && !this.accountsDatabase[username]) {
 				this.setDisconnectEvent(pClient);
-				var vylo = true;
-				var ob = {};
-				var ob2 = {};
-				var ob3 = {};
+				let vylo = true;
+				const ob = {};
+				const ob2 = {};
+				const ob3 = {};
 				ob.username = username;
 				ob3.username = username;
 				ob3.characters = 0;
@@ -443,9 +443,9 @@ const saltRounds = 10;
 
 		// when the character joins the game, not the client
 		aAccount.onCharacterJoin = function(pClient, pNew=false) {
-			let JOIN = 0;
-			let NEW = 1;
-			let OLD = 0;
+			const JOIN = 0;
+			const NEW = 1;
+			const OLD = 0;
 			if (pClient.mob.onJoin && typeof(pClient.mob.onJoin) === 'function') {
 				pClient.mob.onJoin(pNew);
 				pClient.sendPacket(VS.World.global.aNetwork.C_AACCOUNT_PACKETS.C_CHARACTER_HANDLE_CONNECTION_PACKET, [JOIN, (pNew ? NEW : OLD)]);
@@ -457,7 +457,7 @@ const saltRounds = 10;
 
 		// when the character leaves the game, not the client
 		aAccount.onCharacterLeave = function(pClient) {
-			let LEAVE = 1;
+			const LEAVE = 1;
 			this.saveClientCharacter(pClient);
 			if (pClient.mob.onLeave && typeof(pClient.mob.onLeave) === 'function') {
 				pClient.mob.onLeave();
@@ -495,17 +495,17 @@ const saltRounds = 10;
 		// save the clients character
 		aAccount.saveClientCharacter = function(pClient, pSaveAccount) {
 			if (VS.World.getCodeType() === 'server') {
-				var savedData = {};
+				const savedData = {};
 
-				for (var a of saveableStats) {
+				for (const a of saveableStats) {
 					savedData[a] = pClient.mob.stats[a];
 				}
 					
-				for (var b of saveableStyles) {
+				for (const b of saveableStyles) {
 					savedData[b] = pClient.mob.style[b];
 				}
 
-				for (var c of saveableInfo) {
+				for (const c of saveableInfo) {
 					savedData[c] = pClient.mob.info[c];
 				}
 				
@@ -526,7 +526,8 @@ const saltRounds = 10;
 		// load the clients character
 		aAccount.loadClientCharacter = function(pClient, pSlot) {
 			if (VS.World.getCodeType() === 'server') {
-				var player = VS.newDiob('Mob/Player');
+				const player = VS.newDiob('Mob/Player');
+				player.setPos(0, 0);
 				pClient.setPlayerMob(player);
 				// folders are the first 3 chars of a account name
 				VS.File.readSave('accounts/' + pClient.accountName.slice(0, 3) + '/' + pClient.accountName, [this.finishLoadClientCharacter, pClient, [pSlot, pClient.accountName]]);
@@ -535,7 +536,7 @@ const saltRounds = 10;
 
 		// finish loading the character, the this in this function belongs to the client
 		aAccount.finishLoadClientCharacter = function(pData, pError, pSlot, pAccountName) {
-			var count = 0;
+			let count = 0;
 			if (pError) {
 				if (aAccount.debugging) {
 					console.error('Save file didn\'t load properly');
@@ -550,13 +551,13 @@ const saltRounds = 10;
 				return;
 			}
 			
-			for (var character of Object.keys(pData[pAccountName])) {
+			for (const character of Object.keys(pData[pAccountName])) {
 				// if it is a object, it is a character
 				if (typeof(pData[pAccountName][character]) === 'object') {
 					count++;
 					// if you looped through the amount of characters, and the loop matches the slot u clicked, this must be the correct character
 					if (count === pSlot) {
-						for (var variable in pData[pAccountName][character]) {
+						for (const variable in pData[pAccountName][character]) {
 							if (saveableInfo.includes(variable)) {
 								this.mob.info[variable] = pData[pAccountName][character][variable];
 							}
@@ -582,14 +583,14 @@ const saltRounds = 10;
 
 		// return the time to store for later use for calculating time
 		aAccount.getTime = function(pFull) {
-			var now = new Date();
-			var meridiem = 'AM';
-			var year = now.getFullYear();
-			var month = now.getMonth() + 1;
-			var day = now.getDate();
-			var hour = now.getHours();
-			var minute = now.getMinutes();
-			var second = now.getSeconds();
+			const now = new Date();
+			let meridiem = 'AM';
+			let year = now.getFullYear();
+			let month = now.getMonth() + 1;
+			let day = now.getDate();
+			let hour = now.getHours();
+			let minute = now.getMinutes();
+			let second = now.getSeconds();
 			
 			if (hour >= 12) {
 				if (hour > 12) {
@@ -621,7 +622,7 @@ const saltRounds = 10;
 			const MAX_BACKUP_CODE_LENGTH = 6;
 
 			// check the format of pBackupCode
-			for (var user of this.usernameDatabase) {
+			for (const user of this.usernameDatabase) {
 				if (pUsername.trim().toUpperCase() === user.trim().toUpperCase()) {
 					if (pInternal) {
 						return false;
@@ -667,8 +668,8 @@ const saltRounds = 10;
 
 		// generate a token
 		aAccount.generateToken = function(pCharacters) {
-			var token = '';
-			for (var i = 0; i < pCharacters; i++) {
+			let token = '';
+			for (let i = 0; i < pCharacters; i++) {
 				token += this.tokenCharacters.charAt(Math.floor(Math.random() * this.tokenCharacters.length));
 			}
 
@@ -683,9 +684,9 @@ const saltRounds = 10;
 						console.error('Error hashing password for: ' + pUsername);
 						return;
 					}
-					var ob = {};
-					var ob2 = {};
-					var ob3 = {};
+					const ob = {};
+					const ob2 = {};
+					const ob3 = {};
 					ob.username = pUsername;
 					ob.hash = pHash;
 					ob3.username = pUsername;
@@ -765,14 +766,14 @@ const saltRounds = 10;
 				// maybe send a packet to let the clients know when the server will end. Maybe send them a time window, and then count down on their client from then.
 			}
 
-			for (var client of VS.World.getClients()) {
+			for (const client of VS.World.getClients()) {
 				if (client.mob.inGame || client.loggedIn) {
 					this.clientsToBeSaved++;
 					this.clientsToBeSavedAutomatically.push(client)
 				}
 			}
 
-			for (var client of VS.World.getClients()) {
+			for (const client of VS.World.getClients()) {
 				if (pLogout) {
 					this.logout(client);
 				} else {
@@ -800,7 +801,7 @@ const saltRounds = 10;
 			}
 		}
 
-		let periodicSaveInterval = setInterval(function() {
+		const periodicSaveInterval = setInterval(function() {
 			aAccount.periodicSave();
 		}, PERIODIC_SAVE_INTERVAL);
 
