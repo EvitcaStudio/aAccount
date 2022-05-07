@@ -3,7 +3,7 @@
 #BEGIN JAVASCRIPT
 (() => {
 	const engineWaitId = setInterval(() => {
-		if (VS?.Client && VS?.World?.global && VS?.World?.global?.aNetwork) {
+		if (VS.Client && VS.World && VS.World.global && VS.World.global.aNetwork) {
 			clearInterval(engineWaitId);
 			let aAccount = {};
 			if (VS.World.getCodeType() === 'local') {
